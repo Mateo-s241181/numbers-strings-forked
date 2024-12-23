@@ -3,28 +3,18 @@ package natural
 // NumberString3Digits erwartet eine Zahl 0 <= n <= 999 und liefert den zugehörigen String.
 func NumberString3Digits(n int) string {
 
-	finalString := ""
-
-	firstDigit := n % 10
+	firstDigit := n % 10 //Least Significant Digit
 	secondDigit := ((n - (n % 10)) % 100) / 10
-	thirdDigit := (n - (n % 100)) / 100
+	thirdDigit := (n - (n % 100)) / 100 //Most Significant Digit
 
-	if n < 10 {
-		finalString = NumberUnderTen(firstDigit)
+	if secondDigit < 2 {
+		//Ist die Zahl unter 100 kann sie Direkt in die Funktion eingesetzt werden (100er Stelle wird ansonsten als "null" ausgegeben)
+		if n <= 100 {
+			return NumberStringBelow20(n)
+		}
+		//Wenn die Zahl über 100 ist müssen die einzelnen Digits in die Jeweiligen Funktionen eingesetzt werden
+		return DigitString100(thirdDigit) + NumberStringBelow20(10*secondDigit+firstDigit)
 	}
 
-	if n < 20 && n >= 10 {
-		finalString = NumberBetweenTenAndTwenty(firstDigit)
-	}
-
-	if n >= 20 {
-
-		stringHundreds := DigitString100(thirdDigit)
-		stringTens := DigitString10(secondDigit)
-		stringOnes := DigitString1(firstDigit)
-
-		finalString = stringHundreds + stringOnes + stringTens
-	}
-
-	return finalString
+	return NumberStringGreater20(n)
 }
